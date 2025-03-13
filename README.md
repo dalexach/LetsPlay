@@ -103,11 +103,5 @@ Si tienes preguntas, sugerencias o simplemente quieres decir "hola", ¡contácta
 
 ---
 
-## 📜 Licencia
-
-Este proyecto está bajo la licencia MIT 📝. Puedes usarlo, modificarlo y compartirlo como quieras. Consulta el archivo LICENSE para más detalles.
-
----
-
 🌟 ¡Diviértete jugando y aprendiendo a programar! 🚀
 ¿Sabías que este juego fue hecho con código? 🤔 ¡Tal vez algún día tú también puedas crear tus propios juegos! 🎮✨
