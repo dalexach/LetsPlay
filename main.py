@@ -14,15 +14,14 @@ WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 RED = (255, 0, 0)
 GREEN = (0, 255, 0)
-BLUE = (0, 0, 255)
 
 # Reloj para controlar FPS
 clock = pygame.time.Clock()
 FPS = 60
 
-# Variables del juego
+# Variables globales
 lives = 3
-score = 0
+score = 0  # Variable global para la puntuación
 
 # Posiciones iniciales
 paddle_x = WIDTH // 2 - 50
@@ -47,6 +46,8 @@ def draw_text(text, font_size, color, x, y):
 
 def show_menu():
     """Muestra el menú principal."""
+    global score  # Reiniciar la puntuación al iniciar el juego
+    score = 0
     while True:
         screen.fill(BLACK)
         draw_text("Brick Breaker", 74, WHITE, WIDTH // 2 - 200, HEIGHT // 4)
@@ -66,12 +67,12 @@ def show_menu():
 
         pygame.display.flip()
 
-def game_over_screen():
+def game_over_screen(final_score):
     """Muestra la pantalla de 'Game Over'."""
     while True:
         screen.fill(BLACK)
         draw_text("GAME OVER", 74, RED, WIDTH // 2 - 150, HEIGHT // 4)
-        draw_text(f"Puntuación Final: {score}", 36, WHITE, WIDTH // 2 - 150, HEIGHT // 2)
+        draw_text(f"Puntuación Final: {final_score}", 36, WHITE, WIDTH // 2 - 150, HEIGHT // 2)
         draw_text("Presiona R para reiniciar", 36, GREEN, WIDTH // 2 - 150, HEIGHT // 2 + 50)
         draw_text("Presiona ESC para salir", 36, RED, WIDTH // 2 - 150, HEIGHT // 2 + 100)
 
@@ -91,16 +92,17 @@ def game_over_screen():
 # Clase Game
 class Game:
     def __init__(self):
+        global score  # Usar la variable global `score`
         self.paddle_x = WIDTH // 2 - 50
         self.paddle_y = HEIGHT - 30
         self.ball_x, self.ball_y = WIDTH // 2, HEIGHT // 2
         self.ball_dx, self.ball_dy = 4, -4
         self.lives = 3
-        self.score = 0
+        self.score = score  # Inicializar con el valor global de `score`
         self.running = True
 
     def run(self):
-        global bricks
+        global bricks, score  # Usar las variables globales
         while self.running:
             screen.fill(BLACK)
 
@@ -136,7 +138,8 @@ class Game:
                 if brick.collidepoint(self.ball_x, self.ball_y):
                     bricks.remove(brick)
                     self.ball_dy = -self.ball_dy
-                    self.score += 10
+                    self.score += 10  # Incrementar la puntuación
+                    score = self.score  # Actualizar la variable global
                     break
 
             # Pelota cae al suelo
@@ -146,7 +149,7 @@ class Game:
                 self.ball_dx, self.ball_dy = 4, -4
                 if self.lives == 0:
                     self.running = False
-                    if game_over_screen():  # Si el jugador elige reiniciar
+                    if game_over_screen(score):  # Pasar la puntuación final
                         self.__init__()  # Reinicia el juego
                         bricks.clear()  # Limpia los ladrillos anteriores
                         for row in range(5):
